@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPhotosByCategory } from "@/lib/db";
+import { readPhotos } from "@/lib/photos-store";
 import CategoryGallery from "@/components/CategoryGallery";
 
 const CATEGORIES: Record<string, string> = {
@@ -41,7 +41,10 @@ export default async function CategoryPage({ params }: PageProps) {
   const { category } = await params;
   if (!CATEGORIES[category]) notFound();
 
-  const photos = await getPhotosByCategory(SLUG_TO_DB[category]).catch(() => []);
+  const allPhotos = await readPhotos().catch(() => []);
+  const photos = allPhotos
+    .filter((p) => p.category === SLUG_TO_DB[category])
+    .sort((a, b) => a.position - b.position);
 
   return (
     <CategoryGallery
