@@ -16,7 +16,6 @@ import {
   rectSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { createClient } from "@/lib/supabase/client";
 import PhotoCard from "./PhotoCard";
 import UploadZone from "./UploadZone";
 
@@ -43,17 +42,13 @@ export default function AdminGallery() {
   const [editMode, setEditMode] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   const fetchPhotos = useCallback(async () => {
-    const { data } = await supabase
-      .from("photos")
-      .select("*")
-      .order("category")
-      .order("position");
-    setPhotos(data ?? []);
+    const res = await fetch("/api/photos");
+    const data = await res.json();
+    setPhotos(data);
     setLoading(false);
-  }, [supabase]);
+  }, []);
 
   useEffect(() => { fetchPhotos(); }, [fetchPhotos]);
 
@@ -70,18 +65,20 @@ export default function AdminGallery() {
     const oldIndex = categoryPhotos.findIndex((p) => p.id === active.id);
     const newIndex = categoryPhotos.findIndex((p) => p.id === over.id);
     const reordered = arrayMove(categoryPhotos, oldIndex, newIndex);
-
-    // Update positions
     const updated = reordered.map((p, i) => ({ ...p, position: i + 1 }));
+
     setPhotos((prev) => [
       ...prev.filter((p) => p.category !== category),
       ...updated,
     ]);
 
-    // Persist to Supabase
     await Promise.all(
       updated.map((p) =>
-        supabase.from("photos").update({ position: p.position }).eq("id", p.id)
+        fetch(`/api/photos/${p.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ position: p.position }),
+        })
       )
     );
   };
@@ -97,7 +94,7 @@ export default function AdminGallery() {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await fetch("/api/admin/logout", { method: "POST" });
     window.location.href = "/admin/login";
   };
 

@@ -1,49 +1,24 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { getIronSession } from "iron-session";
+import type { SessionData } from "@/lib/session";
+import { sessionOptions } from "@/lib/session";
 
 export default async function proxy(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
+  const response = NextResponse.next();
+  const session = await getIronSession<SessionData>(request, response, sessionOptions);
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
+  const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
+  const isLoginPage = request.nextUrl.pathname === "/admin/login";
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Protect /admin (but not /admin/login)
-  if (
-    request.nextUrl.pathname.startsWith("/admin") &&
-    !request.nextUrl.pathname.startsWith("/admin/login") &&
-    !user
-  ) {
+  if (isAdminPath && !isLoginPage && !session.isAdmin) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
-  // Redirect logged-in users away from login page
-  if (request.nextUrl.pathname === "/admin/login" && user) {
+  if (isLoginPage && session.isAdmin) {
     return NextResponse.redirect(new URL("/admin", request.url));
   }
 
-  return supabaseResponse;
+  return response;
 }
 
 export const config = {

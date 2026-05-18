@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
-import { createClient } from "@/lib/supabase/client";
 
 // Fallback photos shown before Supabase is configured
 const FALLBACK_PHOTOS = [
@@ -48,14 +47,10 @@ export default function GallerySection() {
   const [lightboxIndex, setLightboxIndex] = useState(-1);
 
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return;
-    const supabase = createClient();
-    supabase
-      .from("photos")
-      .select("*")
-      .order("category")
-      .order("position")
-      .then(({ data }) => { if (data && data.length > 0) setPhotos(data); });
+    fetch("/api/photos")
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data) && data.length > 0) setPhotos(data); })
+      .catch(() => {/* keep fallback photos */});
   }, []);
 
   const filtered = activeFilter === "all"

@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,15 +15,17 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError("");
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const res = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
 
-    if (error) {
-      setError("Incorrect email or password.");
-      setLoading(false);
-    } else {
+    if (res.ok) {
       router.push("/admin");
-      router.refresh();
+    } else {
+      setError("Incorrect password. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -51,24 +52,6 @@ export default function AdminLoginPage() {
           className="bg-white rounded-3xl p-8 shadow-xl border-2 border-yellow-200"
         >
           <div className="flex flex-col gap-5">
-            <div>
-              <label
-                className="block text-pink-700 text-sm font-medium mb-1 uppercase tracking-wider"
-                style={{ fontFamily: "var(--font-cormorant)" }}
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full border border-pink-200 rounded-xl px-4 py-3 text-pink-900 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all"
-                style={{ fontFamily: "var(--font-cormorant)", fontSize: "1.1rem" }}
-                placeholder="your@email.com"
-              />
-            </div>
-
             <div>
               <label
                 className="block text-pink-700 text-sm font-medium mb-1 uppercase tracking-wider"
@@ -108,13 +91,13 @@ export default function AdminLoginPage() {
         </form>
 
         <p className="text-center mt-6">
-          <a
+          <Link
             href="/"
             className="text-pink-500 text-sm hover:text-pink-700 transition-colors cursor-pointer"
             style={{ fontFamily: "var(--font-cormorant)" }}
           >
             ← Back to website
-          </a>
+          </Link>
         </p>
       </div>
     </div>

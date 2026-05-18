@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { createClient } from "@/lib/supabase/client";
 
 const CATEGORIES = [
   { value: "wedding", label: "Weddings" },
@@ -45,23 +44,20 @@ export default function PhotoCard({ photo, editMode, onDelete, onUpdate }: Photo
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const supabase = createClient();
-
   const saveField = async (field: keyof Photo, value: string | number) => {
     setSaving(true);
-    await supabase.from("photos").update({ [field]: value }).eq("id", photo.id);
+    await fetch(`/api/photos/${photo.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [field]: value }),
+    });
     onUpdate(photo.id, { [field]: value } as Partial<Photo>);
     setSaving(false);
   };
 
   const handleDelete = async () => {
     if (!confirmDelete) { setConfirmDelete(true); return; }
-    // Delete from storage if it's a Supabase URL
-    if (photo.src.includes("supabase")) {
-      const path = photo.src.split("/gallery/")[1];
-      if (path) await supabase.storage.from("gallery").remove([path]);
-    }
-    await supabase.from("photos").delete().eq("id", photo.id);
+    await fetch(`/api/photos/${photo.id}`, { method: "DELETE" });
     onDelete(photo.id);
   };
 

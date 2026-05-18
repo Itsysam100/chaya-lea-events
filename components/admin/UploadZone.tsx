@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { createClient } from "@/lib/supabase/client";
 
 const CATEGORIES = [
   { value: "wedding", label: "Weddings" },
@@ -24,7 +23,6 @@ export default function UploadZone({ onUploaded, totalPhotos }: UploadZoneProps)
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
-  const supabase = createClient();
 
   const uploadFiles = async (files: FileList) => {
     if (!files.length) return;
@@ -34,27 +32,14 @@ export default function UploadZone({ onUploaded, totalPhotos }: UploadZoneProps)
       const file = files[i];
       setProgress(`Uploading ${i + 1} of ${files.length}…`);
 
-      const ext = file.name.split(".").pop();
-      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("category", category);
+      formData.append("label", label || file.name.replace(/\.[^.]+$/, ""));
+      formData.append("caption", caption);
 
-      const { data: storageData, error: storageError } = await supabase.storage
-        .from("gallery")
-        .upload(filename, file, { cacheControl: "3600", upsert: false });
-
-      if (storageError) { console.error(storageError); continue; }
-
-      const { data: urlData } = supabase.storage
-        .from("gallery")
-        .getPublicUrl(storageData.path);
-
-      await supabase.from("photos").insert({
-        src: urlData.publicUrl,
-        alt: label || file.name.replace(/\.[^.]+$/, ""),
-        category,
-        label: label || "",
-        caption: caption || "",
-        position: totalPhotos + i + 1,
-      });
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) { console.error("Upload failed for", file.name); }
     }
 
     setProgress("");

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getPhotosByCategory } from "@/lib/db";
 import CategoryGallery from "@/components/CategoryGallery";
 
 const CATEGORIES: Record<string, string> = {
@@ -41,16 +41,11 @@ export default async function CategoryPage({ params }: PageProps) {
   const { category } = await params;
   if (!CATEGORIES[category]) notFound();
 
-  const supabase = await createClient();
-  const { data: photos } = await supabase
-    .from("photos")
-    .select("id, src, alt, label, caption, position")
-    .eq("category", SLUG_TO_DB[category])
-    .order("position");
+  const photos = await getPhotosByCategory(SLUG_TO_DB[category]).catch(() => []);
 
   return (
     <CategoryGallery
-      photos={photos ?? []}
+      photos={photos}
       categoryLabel={CATEGORIES[category]}
     />
   );
