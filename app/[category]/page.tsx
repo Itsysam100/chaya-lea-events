@@ -4,7 +4,7 @@ import CategoryGallery from "@/components/CategoryGallery";
 
 const CATEGORIES: Record<string, string> = {
   weddings: "Weddings",
-  "bar-mitzvah": "Bar & Bat Mitzvahs",
+  "bar-mitzvah": "Bar Mitzvahs",
   sheva: "Sheva Brachot",
   engagement: "Engagement Parties",
   other: "Other Events",

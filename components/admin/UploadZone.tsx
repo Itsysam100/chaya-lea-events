@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 
 const CATEGORIES = [
   { value: "wedding", label: "Weddings" },
-  { value: "barmitzvah", label: "Bar & Bat Mitzvahs" },
+  { value: "barmitzvah", label: "Bar Mitzvahs" },
   { value: "sheva", label: "Sheva Brachot" },
   { value: "engagement", label: "Engagements" },
   { value: "other", label: "Other Events" },

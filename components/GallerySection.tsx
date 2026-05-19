@@ -24,7 +24,7 @@ const FALLBACK_PHOTOS = [
 const filters = [
   { key: "all",        label: "All Events" },
   { key: "wedding",    label: "Weddings" },
-  { key: "barmitzvah", label: "Bar & Bat Mitzvahs" },
+  { key: "barmitzvah", label: "Bar Mitzvahs" },
   { key: "sheva",      label: "Sheva Brachot" },
   { key: "engagement", label: "Engagements" },
   { key: "other",      label: "Other Events" },

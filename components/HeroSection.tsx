@@ -2,7 +2,7 @@
 
 const eventTags = [
   "Weddings",
-  "Bar & Bat Mitzvahs",
+  "Bar Mitzvahs",
   "Sheva Brachot",
   "Engagement Parties",
   "& More",

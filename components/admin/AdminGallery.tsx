@@ -31,7 +31,7 @@ interface Photo {
 
 const CATEGORY_LABELS: Record<string, string> = {
   wedding: "Weddings",
-  barmitzvah: "Bar & Bat Mitzvahs",
+  barmitzvah: "Bar Mitzvahs",
   sheva: "Sheva Brachot",
   engagement: "Engagements",
   other: "Other Events",
