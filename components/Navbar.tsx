@@ -12,11 +12,32 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    navLinks.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollTo = (id: string) => {
@@ -46,13 +67,17 @@ export default function Navbar() {
             <button
               key={id}
               onClick={() => scrollTo(id)}
-              className="text-pink-800 text-base font-medium hover:text-yellow-600 transition-colors duration-200 cursor-pointer"
-              style={{
-                fontFamily: "var(--font-cormorant)",
-                letterSpacing: "0.1em",
-              }}
+              className={`text-base font-medium transition-all duration-200 cursor-pointer relative ${
+                activeSection === id
+                  ? "text-yellow-600"
+                  : "text-pink-800 hover:text-yellow-600"
+              }`}
+              style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "0.1em" }}
             >
               {label}
+              {activeSection === id && (
+                <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-yellow-600 rounded-full" />
+              )}
             </button>
           ))}
         </div>
@@ -70,26 +95,11 @@ export default function Navbar() {
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {menuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             )}
           </svg>
         </button>
@@ -101,7 +111,9 @@ export default function Navbar() {
             <button
               key={id}
               onClick={() => scrollTo(id)}
-              className="text-pink-800 text-lg font-medium text-left cursor-pointer hover:text-yellow-600 transition-colors"
+              className={`text-lg font-medium text-left cursor-pointer transition-colors ${
+                activeSection === id ? "text-yellow-600" : "text-pink-800 hover:text-yellow-600"
+              }`}
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
               {label}

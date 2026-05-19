@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
-// Fallback photos shown before Supabase is configured
 const FALLBACK_PHOTOS = [
   { id: "1", src: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80", alt: "Elegant wedding table", category: "wedding", label: "Wedding Reception", caption: "", position: 1 },
   { id: "2", src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80", alt: "Outdoor wedding", category: "wedding", label: "Garden Wedding", caption: "", position: 2 },
@@ -23,12 +22,12 @@ const FALLBACK_PHOTOS = [
 ];
 
 const filters = [
-  { key: "all", label: "All Events", href: null },
-  { key: "wedding", label: "Weddings", href: "/weddings" },
-  { key: "barmitzvah", label: "Bar & Bat Mitzvahs", href: "/bar-mitzvah" },
-  { key: "sheva", label: "Sheva Brachot", href: "/sheva" },
-  { key: "engagement", label: "Engagements", href: "/engagement" },
-  { key: "other", label: "Other Events", href: "/other" },
+  { key: "all", label: "All Events" },
+  { key: "wedding", label: "Weddings" },
+  { key: "barmitzvah", label: "Bar & Bat Mitzvahs" },
+  { key: "sheva", label: "Sheva Brachot" },
+  { key: "engagement", label: "Engagements" },
+  { key: "other", label: "Other Events" },
 ];
 
 interface Photo {
@@ -44,23 +43,33 @@ interface Photo {
 export default function GallerySection() {
   const [photos, setPhotos] = useState<Photo[]>(FALLBACK_PHOTOS);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [filterKey, setFilterKey] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
+  const sectionRef = useScrollReveal<HTMLElement>();
+  const prevFilter = useRef("all");
 
   useEffect(() => {
     fetch("/api/photos")
       .then((r) => r.json())
       .then((data) => { if (Array.isArray(data) && data.length > 0) setPhotos(data); })
-      .catch(() => {/* keep fallback photos */});
+      .catch(() => {});
   }, []);
 
   const filtered = activeFilter === "all"
     ? photos
     : photos.filter((p) => p.category === activeFilter);
 
+  const handleFilter = useCallback((key: string) => {
+    if (key === prevFilter.current) return;
+    prevFilter.current = key;
+    setActiveFilter(key);
+    setFilterKey((k) => k + 1);
+  }, []);
+
   const openLightbox = useCallback((i: number) => setLightboxIndex(i), []);
 
   return (
-    <section id="gallery" className="py-24 px-6 bg-pink-50">
+    <section ref={sectionRef} id="gallery" className="section-reveal py-24 px-6 bg-pink-50">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2
@@ -82,40 +91,30 @@ export default function GallerySection() {
           </p>
         </div>
 
-        {/* Filter buttons — category ones navigate to full pages */}
+        {/* Filter buttons — all inline, no page navigation */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
-          {filters.map(({ key, label, href }) =>
-            href ? (
-              <Link
-                key={key}
-                href={href}
-                className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border bg-white text-pink-700 border-pink-200 hover:border-pink-400 hover:text-pink-600 hover:bg-pink-50"
-                style={{ fontFamily: "var(--font-cormorant)" }}
-              >
-                {label} →
-              </Link>
-            ) : (
-              <button
-                key={key}
-                onClick={() => setActiveFilter(key)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border ${
-                  activeFilter === key
-                    ? "bg-pink-600 text-white border-pink-600"
-                    : "bg-white text-pink-700 border-pink-200 hover:border-pink-400 hover:text-pink-600"
-                }`}
-                style={{ fontFamily: "var(--font-cormorant)" }}
-              >
-                {label}
-              </button>
-            )
-          )}
+          {filters.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => handleFilter(key)}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border ${
+                activeFilter === key
+                  ? "bg-pink-600 text-white border-pink-600 shadow-md"
+                  : "bg-white text-pink-700 border-pink-200 hover:border-pink-400 hover:text-pink-600 hover:bg-pink-50"
+              }`}
+              style={{ fontFamily: "var(--font-cormorant)" }}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
           {filtered.map((item, index) => (
             <div
-              key={item.id}
-              className="break-inside-avoid mb-4 group relative overflow-hidden rounded-2xl cursor-pointer shadow-md hover:shadow-xl transition-shadow duration-300"
+              key={`${filterKey}-${item.id}`}
+              className="photo-pop-in break-inside-avoid mb-4 group relative overflow-hidden rounded-2xl cursor-pointer shadow-md hover:shadow-xl transition-shadow duration-300"
+              style={{ animationDelay: `${index * 55}ms` }}
               onClick={() => openLightbox(index)}
             >
               <div className="relative aspect-[4/3]">

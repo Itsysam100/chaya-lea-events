@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const stats = [
   { value: "10+", label: "Years Experience" },
@@ -7,8 +10,10 @@ const stats = [
 ];
 
 export default function AboutSection() {
+  const sectionRef = useScrollReveal<HTMLElement>();
+
   return (
-    <section id="about" className="py-24 px-6 bg-white">
+    <section ref={sectionRef} id="about" className="section-reveal py-24 px-6 bg-white">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2

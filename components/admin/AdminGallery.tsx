@@ -37,11 +37,14 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: "Other Events",
 };
 
+const ALL_TAB = "all";
+
 export default function AdminGallery() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState(ALL_TAB);
 
   const fetchPhotos = useCallback(async () => {
     const res = await fetch("/api/photos");
@@ -100,6 +103,11 @@ export default function AdminGallery() {
 
   const categories = Object.keys(CATEGORY_LABELS);
 
+  // Which categories to render based on active tab
+  const visibleCategories = activeTab === ALL_TAB
+    ? categories
+    : categories.filter((c) => c === activeTab);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-64">
@@ -109,12 +117,12 @@ export default function AdminGallery() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1
-            className="text-5xl text-pink-600"
+            className="text-4xl sm:text-5xl text-pink-600"
             style={{ fontFamily: "var(--font-great-vibes)" }}
           >
             Gallery Manager
@@ -126,17 +134,17 @@ export default function AdminGallery() {
             {photos.length} photos · Chaya Lea Events
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => setShowUpload(!showUpload)}
-            className="bg-yellow-600 text-white px-5 py-2 rounded-full font-medium hover:bg-yellow-700 transition-colors cursor-pointer"
+            className="bg-yellow-600 text-white px-4 sm:px-5 py-2 rounded-full font-medium hover:bg-yellow-700 transition-colors cursor-pointer text-sm sm:text-base"
             style={{ fontFamily: "var(--font-cormorant)" }}
           >
             {showUpload ? "Hide Upload" : "+ Add Photos"}
           </button>
           <button
             onClick={() => setEditMode(!editMode)}
-            className={`px-5 py-2 rounded-full font-medium transition-colors cursor-pointer border ${
+            className={`px-4 sm:px-5 py-2 rounded-full font-medium transition-colors cursor-pointer border text-sm sm:text-base ${
               editMode
                 ? "bg-pink-600 text-white border-pink-600"
                 : "bg-white text-pink-600 border-pink-300 hover:border-pink-500"
@@ -157,7 +165,7 @@ export default function AdminGallery() {
 
       {/* Upload zone */}
       {showUpload && (
-        <div className="mb-10">
+        <div className="mb-8">
           <UploadZone
             totalPhotos={photos.length}
             onUploaded={() => { fetchPhotos(); setShowUpload(false); }}
@@ -166,27 +174,59 @@ export default function AdminGallery() {
       )}
 
       {editMode && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl px-5 py-3 mb-8 flex items-center gap-3">
-          <svg className="w-5 h-5 text-yellow-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-yellow-50 border border-yellow-200 rounded-2xl px-4 py-3 mb-6 flex items-start gap-3">
+          <svg className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <p className="text-yellow-700 text-sm" style={{ fontFamily: "var(--font-cormorant)" }}>
-            Drag the <strong>⠿</strong> handle to reorder, or type a number in the <strong>#</strong> box to set exact position. Changes save instantly.
+            Drag the <strong>⠿</strong> handle to reorder, type a number in <strong>#</strong> to set exact position, or tap <strong>Replace photo</strong> to swap the image. Changes save instantly.
           </p>
         </div>
       )}
 
+      {/* Category filter tabs */}
+      <div className="flex flex-wrap gap-2 mb-8 overflow-x-auto pb-1">
+        <button
+          onClick={() => setActiveTab(ALL_TAB)}
+          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all cursor-pointer border whitespace-nowrap ${
+            activeTab === ALL_TAB
+              ? "bg-pink-600 text-white border-pink-600"
+              : "bg-white text-pink-700 border-pink-200 hover:border-pink-400"
+          }`}
+          style={{ fontFamily: "var(--font-cormorant)" }}
+        >
+          All ({photos.length})
+        </button>
+        {categories.map((cat) => {
+          const count = photos.filter((p) => p.category === cat).length;
+          return (
+            <button
+              key={cat}
+              onClick={() => setActiveTab(cat)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all cursor-pointer border whitespace-nowrap ${
+                activeTab === cat
+                  ? "bg-pink-600 text-white border-pink-600"
+                  : "bg-white text-pink-700 border-pink-200 hover:border-pink-400"
+              }`}
+              style={{ fontFamily: "var(--font-cormorant)" }}
+            >
+              {CATEGORY_LABELS[cat]} ({count})
+            </button>
+          );
+        })}
+      </div>
+
       {/* Category sections */}
-      {categories.map((cat) => {
+      {visibleCategories.map((cat) => {
         const catPhotos = photos
           .filter((p) => p.category === cat)
           .sort((a, b) => a.position - b.position);
 
         return (
-          <div key={cat} className="mb-12">
+          <div key={cat} className="mb-10">
             <div className="flex items-center gap-3 mb-4">
               <h2
-                className="text-3xl text-pink-600"
+                className="text-2xl sm:text-3xl text-pink-600"
                 style={{ fontFamily: "var(--font-great-vibes)" }}
               >
                 {CATEGORY_LABELS[cat]}
@@ -211,7 +251,7 @@ export default function AdminGallery() {
                   items={catPhotos.map((p) => p.id)}
                   strategy={rectSortingStrategy}
                 >
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                     {catPhotos.map((photo) => (
                       <PhotoCard
                         key={photo.id}
