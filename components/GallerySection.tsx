@@ -46,7 +46,7 @@ const carpetVariants = {
     rotateX: 0,
     opacity: 1,
     transition: {
-      duration: 2,
+      duration: 1,
       ease: [0.76, 0, 0.24, 1] as [number,number,number,number],
     },
   },
@@ -55,7 +55,7 @@ const carpetVariants = {
     rotateX: -14,
     opacity: 0.7,
     transition: {
-      duration: 2,
+      duration: 1,
       ease: [0.76, 0, 0.24, 1] as [number,number,number,number],
     },
   },

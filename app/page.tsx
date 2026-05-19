@@ -8,6 +8,7 @@ import GallerySection from "@/components/GallerySection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import GoldRain from "@/components/GoldRain";
+import Chandelier from "@/components/Chandelier";
 
 export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -29,6 +30,7 @@ export default function Home() {
   return (
     <>
       <GoldRain />
+      <Chandelier />
       <div ref={wrapperRef}>
         <Navbar />
         <main>
