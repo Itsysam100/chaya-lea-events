@@ -94,11 +94,12 @@ export default function Navbar() {
                 onClick={() => scrollTo(id)}
                 className="text-base font-medium transition-all duration-200 cursor-pointer relative pb-0.5"
                 style={{
+                  fontFamily: "var(--font-cormorant)",
+                  letterSpacing: "0.1em",
                   color: activeSection === id
                     ? "#D4A843"
                     : scrolled ? "#4A2C1A" : "#ECD9A8",
                 }}
-                style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "0.1em" }}
               >
                 {label}
                 {activeSection === id && (
