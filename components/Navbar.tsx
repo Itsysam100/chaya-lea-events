@@ -39,11 +39,18 @@ export default function Navbar() {
 
   const scrollTo = useCallback((id: string) => {
     setMenuOpen(false);
-    setTransitioning(true);
-    setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      setTransitioning(false);
-    }, 280);
+    if (id === "about") {
+      window.dispatchEvent(new CustomEvent("pageTwist"));
+      setTimeout(() => {
+        document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+      }, 2600);
+    } else {
+      setTransitioning(true);
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+        setTransitioning(false);
+      }, 280);
+    }
   }, []);
 
   return (

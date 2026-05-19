@@ -18,6 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 import PhotoCard from "./PhotoCard";
 import UploadZone from "./UploadZone";
+import AboutEditor from "./AboutEditor";
 
 interface Photo {
   id: string;
@@ -38,6 +39,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const ALL_TAB = "all";
+const ABOUT_TAB = "about";
 
 export default function AdminGallery() {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -197,6 +199,17 @@ export default function AdminGallery() {
         >
           All ({photos.length})
         </button>
+        <button
+          onClick={() => setActiveTab(ABOUT_TAB)}
+          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all cursor-pointer border whitespace-nowrap ${
+            activeTab === ABOUT_TAB
+              ? "bg-pink-600 text-white border-pink-600"
+              : "bg-white text-pink-700 border-pink-200 hover:border-pink-400"
+          }`}
+          style={{ fontFamily: "var(--font-cormorant)" }}
+        >
+          About Text
+        </button>
         {categories.map((cat) => {
           const count = photos.filter((p) => p.category === cat).length;
           return (
@@ -216,8 +229,15 @@ export default function AdminGallery() {
         })}
       </div>
 
+      {/* About editor tab */}
+      {activeTab === ABOUT_TAB && (
+        <div className="mb-10">
+          <AboutEditor />
+        </div>
+      )}
+
       {/* Category sections */}
-      {visibleCategories.map((cat) => {
+      {activeTab !== ABOUT_TAB && visibleCategories.map((cat) => {
         const catPhotos = photos
           .filter((p) => p.category === cat)
           .sort((a, b) => a.position - b.position);

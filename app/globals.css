@@ -62,6 +62,56 @@ body {
   animation: pageShimmer 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* ── Gold tears / rain ── */
+@keyframes goldTearFall {
+  0%   { transform: translateY(-60px) scaleX(1)   scaleY(1);    opacity: 0;    }
+  3%   { opacity: 1; }
+  84%  { transform: translateY(calc(100vh - 30px)) scaleX(1) scaleY(1); opacity: 0.8; }
+  90%  { transform: translateY(calc(100vh + 4px))  scaleX(4)   scaleY(0.2);  opacity: 0.5; }
+  95%  { transform: translateY(calc(100vh + 8px))  scaleX(7)   scaleY(0.05); opacity: 0.2; }
+  99%  { transform: translateY(calc(100vh + 10px)) scaleX(9)   scaleY(0);    opacity: 0;   }
+  100% { transform: translateY(-60px)              scaleX(1)   scaleY(1);    opacity: 0;   }
+}
+
+.gold-tear-drop {
+  animation: goldTearFall 19s linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes goldSplashRing {
+  0%   { transform: scale(0);   opacity: 0.7; }
+  60%  { transform: scale(1);   opacity: 0.3; }
+  100% { transform: scale(1.4); opacity: 0;   }
+}
+
+.gold-splash-ring {
+  position: absolute;
+  bottom: 4px;
+  width: 18px;
+  height: 6px;
+  border: 2px solid #FFD700;
+  border-radius: 50%;
+  animation: goldSplashRing 3s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ── Page twist ── */
+@keyframes pageTwistAnim {
+  0%   { transform: perspective(900px) rotateZ(0deg)   scale(1);    filter: blur(0px); }
+  18%  { transform: perspective(900px) rotateZ(90deg)  scale(0.82); filter: blur(5px); }
+  35%  { transform: perspective(900px) rotateZ(180deg) scale(0.72); filter: blur(9px); }
+  52%  { transform: perspective(900px) rotateZ(270deg) scale(0.80); filter: blur(5px); }
+  70%  { transform: perspective(900px) rotateZ(360deg) scale(0.90); filter: blur(2px); }
+  85%  { transform: perspective(900px) rotateZ(375deg) scale(0.96); filter: blur(0px); }
+  93%  { transform: perspective(900px) rotateZ(358deg) scale(0.99); filter: blur(0px); }
+  100% { transform: perspective(900px) rotateZ(360deg) scale(1);    filter: blur(0px); }
+}
+
+.page-twisting {
+  animation: pageTwistAnim 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: center center;
+}
+
 /* ── Respect reduced-motion preference ── */
 @media (prefers-reduced-motion: reduce) {
   .section-reveal,
