@@ -24,7 +24,7 @@ const statPop = {
 
 const staggerStats = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.13, delayChildren: 1.6 } },
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.28 } },
 };
 
 export default function AboutSection() {
@@ -75,7 +75,7 @@ export default function AboutSection() {
             opacity: 1,
           }}
           viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 2.2, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.2, ease: [0.76, 0, 0.24, 1] }}
           style={{ perspective: "900px", transformOrigin: "top center" }}
         >
           <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -88,7 +88,7 @@ export default function AboutSection() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.8 }}
+                transition={{ duration: 0.35, delay: 0.08 }}
               >
                 {content.heading}
               </motion.h3>
@@ -99,7 +99,7 @@ export default function AboutSection() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 1.0 }}
+                transition={{ duration: 0.35, delay: 0.13 }}
               >
                 {content.para1}
               </motion.p>
@@ -110,7 +110,7 @@ export default function AboutSection() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 1.2 }}
+                transition={{ duration: 0.35, delay: 0.18 }}
               >
                 {content.para2}
               </motion.p>
@@ -122,7 +122,7 @@ export default function AboutSection() {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 1.35 }}
+                  transition={{ duration: 0.35, delay: 0.22 }}
                 >
                   {content.para3}
                 </motion.p>
@@ -161,7 +161,7 @@ export default function AboutSection() {
               initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.4, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
             >
               <div
                 className="absolute -top-4 -left-4 w-full h-full rounded-3xl border-2"
