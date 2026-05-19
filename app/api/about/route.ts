@@ -8,6 +8,13 @@ const DEFAULT = {
   heading: "Creating Unforgettable Celebrations",
   para1: "With a passion for detail and a love for beautiful moments, we have been crafting elegant celebrations for families across the community. Every event is a unique story — and we are honoured to help you tell yours.",
   para2: "From intimate sheva brachot gatherings to grand wedding receptions, we bring creativity, care, and calm to every occasion. Your vision is our mission.",
+  para3: "",
+  photoUrl: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80",
+  stats: [
+    { value: "10+", label: "Years Experience" },
+    { value: "200+", label: "Events Planned" },
+    { value: "500+", label: "Happy Clients" },
+  ],
 };
 
 function readData() {

@@ -8,13 +8,14 @@ const DEFAULT_CONTENT = {
   heading: "Creating Unforgettable Celebrations",
   para1: "With a passion for detail and a love for beautiful moments, we have been crafting elegant celebrations for families across the community. Every event is a unique story — and we are honoured to help you tell yours.",
   para2: "From intimate sheva brachot gatherings to grand wedding receptions, we bring creativity, care, and calm to every occasion. Your vision is our mission.",
+  para3: "",
+  photoUrl: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80",
+  stats: [
+    { value: "10+", label: "Years Experience" },
+    { value: "200+", label: "Events Planned" },
+    { value: "500+", label: "Happy Clients" },
+  ],
 };
-
-const stats = [
-  { value: "10+", label: "Years Experience" },
-  { value: "200+", label: "Events Planned" },
-  { value: "500+", label: "Happy Clients" },
-];
 
 const statPop = {
   hidden: { opacity: 0, scale: 0.8, y: 20 },
@@ -32,7 +33,7 @@ export default function AboutSection() {
   useEffect(() => {
     fetch("/api/about")
       .then((r) => r.json())
-      .then((d) => setContent(d))
+      .then((d) => setContent({ ...DEFAULT_CONTENT, ...d }))
       .catch(() => {});
   }, []);
 
@@ -104,7 +105,7 @@ export default function AboutSection() {
               </motion.p>
 
               <motion.p
-                className="text-muted text-xl leading-relaxed mb-10"
+                className="text-muted text-xl leading-relaxed mb-4"
                 style={{ fontFamily: "var(--font-cormorant)" }}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -114,15 +115,28 @@ export default function AboutSection() {
                 {content.para2}
               </motion.p>
 
+              {content.para3 && (
+                <motion.p
+                  className="text-muted text-xl leading-relaxed mb-4"
+                  style={{ fontFamily: "var(--font-cormorant)" }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 1.35 }}
+                >
+                  {content.para3}
+                </motion.p>
+              )}
+
               {/* Stats pop in after carpet finishes */}
               <motion.div
-                className="grid grid-cols-3 gap-4"
+                className="grid grid-cols-3 gap-4 mt-6"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={staggerStats}
               >
-                {stats.map(({ value, label }) => (
+                {content.stats.map(({ value, label }) => (
                   <motion.div
                     key={label}
                     className="text-center p-4 rounded-2xl border"
@@ -155,7 +169,7 @@ export default function AboutSection() {
               />
               <div className="relative rounded-3xl overflow-hidden shadow-2xl aspect-[3/4]">
                 <Image
-                  src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80"
+                  src={content.photoUrl}
                   alt="Elegant event setup by Elite Events Stamford Hill"
                   fill
                   className="object-cover"
