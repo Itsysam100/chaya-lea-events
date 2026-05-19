@@ -50,11 +50,17 @@ export default function AboutSection() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2
-            className="text-5xl sm:text-6xl text-gold mb-3"
+            className="text-5xl sm:text-6xl text-gold mb-2"
             style={{ fontFamily: "var(--font-great-vibes)" }}
           >
             About Us
           </h2>
+          <p
+            className="text-lg italic mb-3"
+            style={{ fontFamily: "var(--font-cormorant)", color: "#7A5C3A" }}
+          >
+            Mrs Rabinovitz
+          </p>
           <div className="flex items-center justify-center gap-3">
             <div className="w-12 h-px bg-gold-light" />
             <div className="w-2 h-2 rotate-45 bg-gold-light" />

@@ -39,18 +39,11 @@ export default function Navbar() {
 
   const scrollTo = useCallback((id: string) => {
     setMenuOpen(false);
-    if (id === "about") {
-      window.dispatchEvent(new CustomEvent("pageTwist"));
-      setTimeout(() => {
-        document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-      }, 2600);
-    } else {
-      setTransitioning(true);
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-        setTransitioning(false);
-      }, 280);
-    }
+    setTransitioning(true);
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      setTransitioning(false);
+    }, 280);
   }, []);
 
   return (
@@ -59,12 +52,19 @@ export default function Navbar() {
       {transitioning && <div className="page-transition-overlay" aria-hidden />}
 
       <nav
-        className={`fixed top-4 left-4 right-4 z-50 rounded-2xl transition-all duration-300 ${
+        className="fixed top-4 left-4 right-4 z-50 rounded-2xl transition-all duration-300 backdrop-blur-md"
+        style={
           scrolled
-            ? "bg-ivory/90 backdrop-blur-md shadow-lg border border-gold-light"
-            : "bg-ivory/70 backdrop-blur-sm border border-gold-pale"
-        }`}
-        style={scrolled ? { boxShadow: "0 4px 24px rgba(184,134,11,0.10)" } : {}}
+            ? {
+                background: "rgba(253,250,244,0.92)",
+                border: "1px solid #D4A843",
+                boxShadow: "0 4px 24px rgba(184,134,11,0.12)",
+              }
+            : {
+                background: "rgba(27,42,68,0.82)",
+                border: "1px solid rgba(196,168,106,0.35)",
+              }
+        }
       >
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           {/* Logo */}
@@ -73,14 +73,14 @@ export default function Navbar() {
             className="flex flex-col items-start cursor-pointer select-none group"
           >
             <span
-              className="text-3xl text-gold leading-none group-hover:opacity-75 transition-opacity"
-              style={{ fontFamily: "var(--font-great-vibes)" }}
+              className="text-3xl leading-none group-hover:opacity-75 transition-opacity"
+              style={{ fontFamily: "var(--font-great-vibes)", color: "#D4A843" }}
             >
               Elite Events
             </span>
             <span
-              className="text-[0.55rem] text-muted tracking-[0.25em] uppercase -mt-0.5"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="text-[0.55rem] tracking-[0.25em] uppercase -mt-0.5 transition-colors duration-300"
+              style={{ fontFamily: "var(--font-cormorant)", color: scrolled ? "#7A5C3A" : "#C4A86A" }}
             >
               Stamford Hill
             </span>
@@ -92,9 +92,12 @@ export default function Navbar() {
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
-                className={`text-base font-medium transition-all duration-200 cursor-pointer relative pb-0.5 ${
-                  activeSection === id ? "text-gold" : "text-mahogany hover:text-gold"
-                }`}
+                className="text-base font-medium transition-all duration-200 cursor-pointer relative pb-0.5"
+                style={{
+                  color: activeSection === id
+                    ? "#D4A843"
+                    : scrolled ? "#4A2C1A" : "#ECD9A8",
+                }}
                 style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "0.1em" }}
               >
                 {label}
@@ -108,8 +111,13 @@ export default function Navbar() {
           {/* CTA */}
           <button
             onClick={() => scrollTo("contact")}
-            className="hidden md:block bg-gold text-ivory px-6 py-2 rounded-full text-sm font-semibold hover:bg-deep transition-colors duration-200 cursor-pointer"
-            style={{ fontFamily: "var(--font-cormorant)", boxShadow: "0 2px 12px rgba(184,134,11,0.25)" }}
+            className="hidden md:block px-6 py-2 rounded-full text-sm font-semibold transition-all duration-200 cursor-pointer"
+            style={{
+              fontFamily: "var(--font-cormorant)",
+              background: "#D4A843",
+              color: "#1B2A44",
+              boxShadow: "0 2px 12px rgba(212,168,67,0.30)",
+            }}
           >
             Book Now
           </button>
