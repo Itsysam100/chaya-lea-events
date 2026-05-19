@@ -3,6 +3,16 @@
 @theme {
   --font-heading: var(--font-great-vibes);
   --font-body: var(--font-cormorant);
+
+  /* Brand colour palette */
+  --color-ivory:      #FDFAF4;
+  --color-champagne:  #F9F3E8;
+  --color-gold:       #B8860B;
+  --color-gold-light: #D4A843;
+  --color-gold-pale:  #ECD9A8;
+  --color-mahogany:   #4A2C1A;
+  --color-muted:      #7A5C3A;
+  --color-deep:       #3D1A08;
 }
 
 html {
@@ -15,42 +25,41 @@ body {
 
 /* ── Scroll-reveal: sections fade up into view ── */
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .section-reveal {
   opacity: 0;
   transform: translateY(40px);
 }
-
 .section-reveal.is-visible {
   animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* ── Gallery stagger: photos pop in when filter changes ── */
 @keyframes popIn {
-  0% {
-    opacity: 0;
-    transform: scale(0.88) translateY(16px);
-  }
-  60% {
-    transform: scale(1.03) translateY(-2px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  0%   { opacity: 0; transform: scale(0.88) translateY(16px); }
+  60%  { transform: scale(1.03) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-
 .photo-pop-in {
   animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── Page transition: golden shimmer overlay ── */
+@keyframes pageShimmer {
+  0%   { opacity: 0; }
+  35%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+.page-transition-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(135deg, #FDFAF4 0%, #F5E8C0 50%, #FDFAF4 100%);
+  animation: pageShimmer 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* ── Respect reduced-motion preference ── */
@@ -65,5 +74,8 @@ body {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+  .page-transition-overlay {
+    display: none;
   }
 }

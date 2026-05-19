@@ -15,62 +15,69 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden bg-gradient-to-br from-pink-50 via-rose-50 to-pink-100"
+      className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden"
+      style={{ background: "linear-gradient(160deg, #FDFAF4 0%, #F9F0DC 55%, #F5E8C8 100%)" }}
     >
       {/* Decorative blurs */}
       <div
-        className="absolute top-1/4 left-1/4 w-64 h-64 bg-pink-200/30 rounded-full blur-3xl"
+        className="absolute top-1/4 left-1/4 w-72 h-72 rounded-full blur-3xl"
+        style={{ background: "rgba(212,168,67,0.12)" }}
         aria-hidden
       />
       <div
-        className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-yellow-100/40 rounded-full blur-3xl"
+        className="absolute bottom-1/3 right-1/4 w-96 h-96 rounded-full blur-3xl"
+        style={{ background: "rgba(184,134,11,0.08)" }}
         aria-hidden
       />
 
       <div className="relative z-10 max-w-4xl mx-auto">
         <p
-          className="text-pink-500 text-lg tracking-widest uppercase mb-4"
-          style={{
-            fontFamily: "var(--font-cormorant)",
-            letterSpacing: "0.25em",
-          }}
+          className="text-gold text-sm tracking-widest uppercase mb-5"
+          style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "0.35em" }}
         >
-          Welcome to
+          Est. Stamford Hill · London
         </p>
 
         <h1
-          className="text-7xl sm:text-8xl md:text-9xl text-pink-600 mb-4 leading-none"
-          style={{ fontFamily: "var(--font-great-vibes)" }}
+          className="text-gold mb-3 leading-none"
+          style={{
+            fontFamily: "var(--font-great-vibes)",
+            fontSize: "clamp(4rem, 12vw, 8rem)",
+          }}
         >
-          Chaya Lea Rabinovitz
+          Elite Events
         </h1>
 
+        <p
+          className="text-muted text-sm tracking-[0.3em] uppercase mb-6"
+          style={{ fontFamily: "var(--font-cormorant)" }}
+        >
+          Stamford Hill
+        </p>
+
+        {/* Gold divider with diamond */}
         <div className="flex items-center justify-center gap-4 my-6">
-          <div className="w-16 h-px bg-yellow-600" />
-          <svg
-            className="w-5 h-5 text-yellow-600"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden
-          >
-            <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
-          </svg>
-          <div className="w-16 h-px bg-yellow-600" />
+          <div className="w-16 h-px bg-gold-light" />
+          <div className="w-2 h-2 rotate-45 bg-gold-light" />
+          <div className="w-16 h-px bg-gold-light" />
         </div>
 
         <p
-          className="text-2xl sm:text-3xl text-pink-800 font-light italic mb-8"
+          className="text-2xl sm:text-3xl text-muted font-light italic mb-8"
           style={{ fontFamily: "var(--font-cormorant)" }}
         >
-          Turning your most precious moments into lasting memories
+          Turning your most precious moments into timeless memories
         </p>
 
         <div className="flex flex-wrap justify-center gap-3 mb-10">
           {eventTags.map((tag) => (
             <span
               key={tag}
-              className="border border-yellow-600 text-yellow-700 px-5 py-1.5 rounded-full text-sm font-medium"
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="border border-gold-light text-gold px-5 py-1.5 rounded-full text-sm font-medium"
+              style={{
+                fontFamily: "var(--font-cormorant)",
+                background: "rgba(212,168,67,0.07)",
+              }}
             >
               {tag}
             </span>
@@ -79,29 +86,22 @@ export default function HeroSection() {
 
         <button
           onClick={scrollToGallery}
-          className="bg-pink-600 text-white px-10 py-4 rounded-full text-lg font-semibold hover:bg-pink-700 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-pink-200/60 hover:shadow-xl"
-          style={{ fontFamily: "var(--font-cormorant)" }}
+          className="text-ivory px-10 py-4 rounded-full text-lg font-semibold transition-all duration-200 cursor-pointer"
+          style={{
+            fontFamily: "var(--font-cormorant)",
+            background: "#B8860B",
+            boxShadow: "0 4px 24px rgba(184,134,11,0.35)",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "#3D1A08")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "#B8860B")}
         >
           See My Work
         </button>
       </div>
 
-      <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
-        aria-hidden
-      >
-        <svg
-          className="w-6 h-6 text-pink-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" aria-hidden>
+        <svg className="w-6 h-6 text-gold-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </div>
     </section>

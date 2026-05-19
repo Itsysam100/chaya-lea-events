@@ -22,28 +22,23 @@ const FALLBACK_PHOTOS = [
 ];
 
 const filters = [
-  { key: "all", label: "All Events" },
-  { key: "wedding", label: "Weddings" },
+  { key: "all",        label: "All Events" },
+  { key: "wedding",    label: "Weddings" },
   { key: "barmitzvah", label: "Bar & Bat Mitzvahs" },
-  { key: "sheva", label: "Sheva Brachot" },
+  { key: "sheva",      label: "Sheva Brachot" },
   { key: "engagement", label: "Engagements" },
-  { key: "other", label: "Other Events" },
+  { key: "other",      label: "Other Events" },
 ];
 
 interface Photo {
-  id: string;
-  src: string;
-  alt: string;
-  category: string;
-  label: string;
-  caption: string;
-  position: number;
+  id: string; src: string; alt: string; category: string;
+  label: string; caption: string; position: number;
 }
 
 export default function GallerySection() {
-  const [photos, setPhotos] = useState<Photo[]>(FALLBACK_PHOTOS);
+  const [photos, setPhotos]         = useState<Photo[]>(FALLBACK_PHOTOS);
   const [activeFilter, setActiveFilter] = useState("all");
-  const [filterKey, setFilterKey] = useState(0);
+  const [filterKey, setFilterKey]   = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState(-1);
   const sectionRef = useScrollReveal<HTMLElement>();
   const prevFilter = useRef("all");
@@ -69,40 +64,42 @@ export default function GallerySection() {
   const openLightbox = useCallback((i: number) => setLightboxIndex(i), []);
 
   return (
-    <section ref={sectionRef} id="gallery" className="section-reveal py-24 px-6 bg-pink-50">
+    <section ref={sectionRef} id="gallery" className="section-reveal py-24 px-6" style={{ background: "#F9F3E8" }}>
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2
-            className="text-5xl sm:text-6xl text-pink-600 mb-3"
+            className="text-5xl sm:text-6xl text-gold mb-3"
             style={{ fontFamily: "var(--font-great-vibes)" }}
           >
-            My Work
+            Our Work
           </h2>
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-12 h-px bg-yellow-600" />
-            <div className="w-2 h-2 rounded-full bg-yellow-600" />
-            <div className="w-12 h-px bg-yellow-600" />
+            <div className="w-12 h-px bg-gold-light" />
+            <div className="w-2 h-2 rotate-45 bg-gold-light" />
+            <div className="w-12 h-px bg-gold-light" />
           </div>
           <p
-            className="text-pink-700 text-xl italic"
+            className="text-muted text-xl italic"
             style={{ fontFamily: "var(--font-cormorant)" }}
           >
-            Every event tells a story — here are some of mine
+            Every event tells a story — here are some of ours
           </p>
         </div>
 
-        {/* Filter buttons — all inline, no page navigation */}
+        {/* Filter buttons */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
           {filters.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => handleFilter(key)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border ${
-                activeFilter === key
-                  ? "bg-pink-600 text-white border-pink-600 shadow-md"
-                  : "bg-white text-pink-700 border-pink-200 hover:border-pink-400 hover:text-pink-600 hover:bg-pink-50"
-              }`}
-              style={{ fontFamily: "var(--font-cormorant)" }}
+              className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border"
+              style={{
+                fontFamily: "var(--font-cormorant)",
+                background: activeFilter === key ? "#B8860B" : "#fff",
+                color: activeFilter === key ? "#FDFAF4" : "#7A5C3A",
+                borderColor: activeFilter === key ? "#B8860B" : "#D4A843",
+                boxShadow: activeFilter === key ? "0 2px 12px rgba(184,134,11,0.25)" : "none",
+              }}
             >
               {label}
             </button>
@@ -125,9 +122,12 @@ export default function GallerySection() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-pink-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4"
+                  style={{ background: "linear-gradient(to top, rgba(61,26,8,0.75) 0%, transparent 60%)" }}
+                >
                   <p
-                    className="text-white text-lg font-semibold"
+                    className="text-ivory text-lg font-semibold"
                     style={{ fontFamily: "var(--font-cormorant)" }}
                   >
                     {item.label}

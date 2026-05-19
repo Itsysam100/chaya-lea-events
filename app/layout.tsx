@@ -17,9 +17,9 @@ const cormorantInfant = Cormorant_Infant({
 });
 
 export const metadata: Metadata = {
-  title: "Chaya Lea Rabinovitz | Event Planner",
+  title: "Elite Events Stamford Hill | Event Planner",
   description:
-    "Elegant event planning for weddings, bar & bat mitzvahs, sheva brachot, and engagement parties.",
+    "Luxury event planning in Stamford Hill, London. Weddings, bar & bat mitzvahs, sheva brachot, and engagement parties.",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
       lang="en"
       className={`${greatVibes.variable} ${cormorantInfant.variable}`}
     >
-      <body className="bg-pink-50 text-pink-900 antialiased">{children}</body>
+      <body className="bg-ivory text-mahogany antialiased">{children}</body>
     </html>
   );
 }

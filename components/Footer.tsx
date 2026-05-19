@@ -1,27 +1,34 @@
 export default function Footer() {
   return (
-    <footer className="py-10 px-6 bg-pink-900 text-center">
+    <footer className="py-10 px-6 text-center" style={{ background: "#3D1A08" }}>
       <p
-        className="text-5xl text-pink-200 mb-3"
-        style={{ fontFamily: "var(--font-great-vibes)" }}
+        className="text-5xl mb-1"
+        style={{ fontFamily: "var(--font-great-vibes)", color: "#D4A843" }}
       >
-        Chaya Lea Rabinovitz
+        Elite Events
       </p>
       <p
-        className="text-pink-300 text-sm uppercase"
+        className="text-sm uppercase mb-1"
         style={{
           fontFamily: "var(--font-cormorant)",
-          letterSpacing: "0.2em",
+          color: "#ECD9A8",
+          letterSpacing: "0.25em",
         }}
       >
-        Event Planner &middot; Making Moments Magical
+        Stamford Hill · London
       </p>
-      <div className="w-16 h-px bg-yellow-600/50 mx-auto my-5" />
       <p
-        className="text-pink-400 text-sm"
-        style={{ fontFamily: "var(--font-cormorant)" }}
+        className="text-sm italic mb-5"
+        style={{ fontFamily: "var(--font-cormorant)", color: "#A87830" }}
       >
-        &copy; 2026 Chaya Lea Rabinovitz. All rights reserved.
+        Making Every Moment Memorable
+      </p>
+      <div className="w-16 h-px mx-auto mb-5" style={{ background: "rgba(212,168,67,0.4)" }} />
+      <p
+        className="text-sm"
+        style={{ fontFamily: "var(--font-cormorant)", color: "#7A5C3A" }}
+      >
+        &copy; 2026 Elite Events Stamford Hill. All rights reserved.
       </p>
     </footer>
   );
